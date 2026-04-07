@@ -87,6 +87,9 @@
         document.getElementById('pengencer').value = "";
         document.getElementById('hasil').innerHTML = "Hasil: 0 ml";
     }
+    // Update tahun otomatis di footer
+    document.getElementById("year").innerHTML = new Date().getFullYear();
+</script>
 
     <footer class="footer">
         <p>&copy; <span id="year" class="copyright-year"></span> <b>Kalkulator Dosis Medis</b></p>
@@ -95,10 +98,6 @@
             Pastikan kembali perhitungan sesuai protokol Rumah Sakit.
         </p>
     </footer>
-    // Update tahun otomatis di footer
-    document.getElementById("year").innerHTML = new Date().getFullYear();
-</script>
-
     
 
 </body>
