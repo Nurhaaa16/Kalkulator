@@ -102,3 +102,111 @@
 
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Dosis Medis by NJ</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background-color: #f0f4f8; display: flex; flex-direction: column; min-height: 100vh; margin: 0; }
+        .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 400px; margin: auto; width: 100%; box-sizing: border-box; }
+        h2 { text-align: center; color: #2c3e50; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
+        label { display: block; margin-top: 15px; font-weight: bold; color: #34495e; font-size: 0.9em; }
+        select, input { width: 100%; padding: 12px; margin-top: 5px; border-radius: 8px; border: 1px solid #ced4da; box-sizing: border-box; font-size: 1em; }
+        
+        /* Gaya untuk field yang di-disable/readonly */
+        input[readonly] { background-color: #e9ecef; color: #495057; cursor: not-allowed; border: 1px dashed #ced4da; }
+
+        .result-box { margin-top: 25px; padding: 20px; background-color: #27ae60; color: white; text-align: center; border-radius: 12px; font-size: 1.4em; font-weight: bold; box-shadow: 0 4px 10px rgba(39,174,96,0.3); }
+        button { width: 100%; padding: 15px; margin-top: 15px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1em; transition: 0.3s; }
+        .btn-hitung { background-color: #3498db; color: white; }
+        .btn-reset { background-color: #f8f9fa; color: #7f8c8d; margin-top: 10px; border: 1px solid #dee2e6; }
+
+        .footer { margin-top: auto; padding: 20px 10px; text-align: center; color: #7f8c8d; font-size: 0.85em; }
+        .footer b { color: #2c3e50; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>KALKULATOR DOSIS</h2>
+    
+    <label>Pilih Jenis Obat:</label>
+    <select id="obat" onchange="updateSediaan()">
+        <option value="" disabled selected>-- Pilih Jenis Obat --</option>
+        <option value="norepinefrin" data-mg="60" data-v="80">Norepinefrin</option>
+        <option value="dobutamin" data-mg="60" data-v="5000">Dobutamin</option>
+        <option value="dopamin" data-mg="60" data-v="4000">Dopamin</option>
+        <option value="epinefrin" data-mg="60" data-v="20">Epinefrin</option>
+    </select>
+
+    <label>Dosis:</label>
+    <input type="number" id="dosis" step="0.01" placeholder="Masukkan dosis">
+
+    <label>Berat Badan (kg):</label>
+    <input type="number" id="bb" placeholder="Masukkan BB">
+
+    <label>Waktu:</label>
+    <input type="number" id="mg" readonly placeholder="-">
+
+    <label>Volume Pengencer (ml):</label>
+    <input type="number" id="pengencer" readonly placeholder="-">
+
+    <div class="result-box" id="hasil">Hasil: 0 ml</div>
+
+    <button class="btn-hitung" onclick="hitung()">HITUNG DOSIS</button>
+    <button class="btn-reset" onclick="reset()">RESET DATA</button>
+</div>
+
+<footer class="footer">
+    <p>&copy; <span id="year"></span> <b>Dose Calculator by Nurha's Journey</b></p>
+    <p>Healthcare Professional Calculator</p>
+    <p style="font-size: 0.8em; font-style: italic; opacity: 0.7;">
+        *Selalu verifikasi ulang dosis sesuai protokol medis.
+    </p>
+</footer>
+
+<script>
+    function updateSediaan() {
+        const select = document.getElementById('obat');
+        const pilihan = select.options[select.selectedIndex];
+        
+        const mgOtomatis = pilihan.getAttribute('data-mg');
+        const vOtomatis = pilihan.getAttribute('data-v');
+        
+        document.getElementById('mg').value = mgOtomatis;
+        document.getElementById('pengencer').value = vOtomatis;
+    }
+
+    function hitung() {
+        let dosis = parseFloat(document.getElementById('dosis').value);
+        let bb = parseFloat(document.getElementById('bb').value);
+        let mg = parseFloat(document.getElementById('mg').value);
+        let pengencer = parseFloat(document.getElementById('pengencer').value);
+
+        if(!isNaN(dosis) && !isNaN(bb) && !isNaN(mg) && !isNaN(pengencer)) {
+            // Rumus: (Dosis * BB * 60) / (Konsentrasi mcg/ml)
+            let konsentrasi = (dosis * bb * mg) / pengencer;
+            
+            document.getElementById('hasil').innerHTML = kecepatan.toFixed(2) + " ml";
+        } else {
+            alert("Harap pilih obat dan masukkan Dosis serta Berat Badan!");
+        }
+    }
+
+    function reset() {
+        document.getElementById('obat').selectedIndex = 0;
+        document.getElementById('dosis').value = "";
+        document.getElementById('bb').value = "";
+        document.getElementById('mg').value = "";
+        document.getElementById('pengencer').value = "";
+        document.getElementById('hasil').innerHTML = "Hasil: 0 ml/jam";
+    }
+
+    document.getElementById("year").innerHTML = new Date().getFullYear();
+</script>
+
+</body>
+</html>
