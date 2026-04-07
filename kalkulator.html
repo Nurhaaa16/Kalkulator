@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kalkulator Dosis Medis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f7f6; }
+        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #2c3e50; }
+        label { display: block; margin-top: 10px; font-weight: bold; }
+        select, input { width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd; box-sizing: border-box; }
+        .result-box { margin-top: 20px; padding: 15px; background-color: #27ae60; color: white; text-align: center; border-radius: 10px; font-size: 1.2em; }
+        button { width: 100%; padding: 12px; margin-top: 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .btn-reset { background-color: #e74c3c; color: white; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>KALKULATOR DOSIS</h2>
+    
+    <label>Pilih Jenis Obat:</label>
+    <select id="obat">
+        <option value="1">Norepinefrin</option>
+        <option value="1">Dobutamin</option>
+        <option value="1">Dopamin</option>
+        <option value="1">Epinefrin</option>
+    </select>
+
+    <label>Dosis:</label>
+    <input type="number" id="dosis" placeholder="Contoh: 0.1">
+
+    <label>Berat Badan (kg):</label>
+    <input type="number" id="bb" placeholder="Contoh: 40">
+
+    <label>Waktu:</label>
+    <input type="number" id="mg" placeholder="Contoh: 60">
+
+    <label>Volume Pengencer (ml):</label>
+    <input type="number" id="pengencer" placeholder="Contoh: 50">
+
+    <div class="result-box" id="hasil">Hasil: 0 ml</div>
+
+    <button onclick="hitung()" style="background-color: #3498db; color: white;">HITUNG</button>
+    <button class="btn-reset" onclick="reset()">RESET</button>
+</div>
+
+<script>
+    function hitung() {
+        let dosis = document.getElementById('dosis').value;
+        let bb = document.getElementById('bb').value;
+        let mg = document.getElementById('mg').value;
+        let pengencer = document.getElementById('pengencer').value;
+
+        if(dosis && bb && mg && pengencer) {
+            // Rumus: (Dosis * BB * 60) / (Konsentrasi mcg/ml)
+            let konsentrasi = (dosis * bb * mg) / pengencer;
+            
+            document.getElementById('hasil').innerHTML = "Hasil: " + konsentrasi.toFixed(2) + " ml";
+        } else {
+            alert("Mohon isi semua data!");
+        }
+    }
+
+    function reset() {
+        document.getElementById('dosis').value = "";
+        document.getElementById('bb').value = "";
+        document.getElementById('mg').value = "";
+        document.getElementById('pengencer').value = "";
+        document.getElementById('hasil').innerHTML = "Hasil: 0 ml";
+    }
+</script>
+
+</body>
+</html>
