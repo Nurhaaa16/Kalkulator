@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INOSMART by NJ</title>
+    <title>InoVas Q by NJ</title>
     <style>
         body { font-family: sans-serif; padding: 20px; background-color: #f4f7f6; }
         .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 400px; margin: auto; }
@@ -21,17 +21,22 @@
 <body>
 
 <div class="card">
-    <h2>INOSMART</h2>
-    <h4><center><italic>(Inotropik Smart Calculator)</italic></center></h4>
+    <h2>InoVas Q</h2>
+    <h4><center><italic>(Inotropik - Vasopressore Quick)</italic></center></h4>
 
     <p>
     <label>Pilih Jenis Obat:</label>
-    <select id="obat" onchange="isiOtomatis()">
+    <select id="obat" onchange="updateAmpul()">
         <option value="">-- Pilih Obat --</option>
         <option value="norepinefrin">Norepinefrin</option>
         <option value="dobutamin">Dobutamin</option>
         <option value="dopamin">Dopamin</option>
         <option value="epinefrin">Epinefrin</option>
+    </select>
+
+    <label>Jumlah Ampul:</label>
+    <select id="jml_ampul" onchange="isiOtomatis()">
+        <option value="">-- Pilih Jumlah Ampul Setelah Pilih Obat --</option>
     </select>
 
     <label>Dosis:</label>
@@ -43,10 +48,11 @@
     <label>Waktu:</label>
     <input type="number" id="mg" readonly placeholder="Otomatis">
 
-    <label>Pengencer:</label>
+    <label>Sediaan Obat/Konsentrasi (mcg):</label>
     <input type="number" id="pengencer" readonly placeholder="Otomatis">
 
     <div class="result-box" id="hasil">Hasil: 0 ml</div>
+    <center><label><strong><italic>Semua obat dilarutkan dalam 50 cc NaCl*</italic></strong></label></center>
 
     <button class="btn-hitung" onclick="hitungDosis()">HITUNG</button>
     <button class="btn-reset" onclick="resetForm()">RESET</button>
@@ -63,28 +69,84 @@
 
 <script>
     // 1. Logika IF untuk mengisi angka otomatis saat obat dipilih
-    function isiOtomatis() {
-        const jenisObat = document.getElementById('obat').value;
-        const fieldMg = document.getElementById('mg');
-        const fieldPengencer = document.getElementById('pengencer');
+   // function isiOtomatis() {
+    //    const jenisObat = document.getElementById('obat').value;
+   //     const fieldMg = document.getElementById('mg');
+    //    const fieldPengencer = document.getElementById('pengencer');
 
-        if (jenisObat === "norepinefrin") {
+    //    if (jenisObat === "norepinefrin" ) {
             fieldMg.value = 60;
             fieldPengencer.value = 80;
-        } else if (jenisObat === "dobutamin") {
+   //    } else if (jenisObat === "dobutamin") {
             fieldMg.value = 60;
             fieldPengencer.value = 5000;
-        } else if (jenisObat === "dopamin") {
+     //   } else if (jenisObat === "dopamin") {
             fieldMg.value = 60;
             fieldPengencer.value = 4000;
-        } else if (jenisObat === "epinefrin") {
+    //    } else if (jenisObat === "epinefrin") {
             fieldMg.value = 60;
             fieldPengencer.value = 20;
-        } else {
+    //    } else {
             fieldMg.value = "";
             fieldPengencer.value = "";
-        }
+    //    }
+  //  } 
+
+    // FUNGSI 1: Mengubah pilihan dropdown ampul berdasarkan jenis obat
+function updateAmpul() {
+    const jenisObat = document.getElementById('obat').value;
+    const selectAmpul = document.getElementById('jml_ampul');
+    
+    // Kosongkan pilihan ampul sebelumnya
+    selectAmpul.innerHTML = '<option value="">-- Pilih Jumlah Ampul --</option>';
+
+    let pilihan = [];
+    if (jenisObat === "epinefrin") {
+        pilihan = [1, 2, 3, 4, 5, 6];
+    } else if (jenisObat === "norepinefrin") {
+        pilihan = [1, 2, 3];
+    } else if (jenisObat === "dobutamin" || jenisObat === "dopamin") {
+        pilihan = [1];
     }
+
+    // Masukkan pilihan ke dalam dropdown
+    pilihan.forEach(jml => {
+        let opt = document.createElement('option');
+        opt.value = jml;
+        opt.innerHTML = jml + " Ampul";
+        selectAmpul.appendChild(opt);
+    });
+
+    // Reset field MG dan Pengencer saat ganti obat
+    document.getElementById('mg').value = "";
+    document.getElementById('pengencer').value = "";
+}
+
+// FUNGSI 2: Mengisi MG dan Pengencer berdasarkan jenis obat + jumlah ampul
+function isiOtomatis() {
+    const jenisObat = document.getElementById('obat').value;
+    const jmlAmpul = parseInt(document.getElementById('jml_ampul').value);
+    const fieldMg = document.getElementById('mg');
+    const fieldPengencer = document.getElementById('pengencer');
+
+    if (!jenisObat || !jmlAmpul) return;
+
+    // Nilai MG tetap 60 sesuai permintaanmu sebelumnya
+    fieldMg.value = 60;
+
+    if (jenisObat === "epinefrin") {
+        fieldPengencer.value = jmlAmpul * 20; // 1=20, 2=40, dst.
+    } 
+    else if (jenisObat === "norepinefrin") {
+        fieldPengencer.value = jmlAmpul * 80; // 1=80, 2=160, 3=240
+    } 
+    else if (jenisObat === "dobutamin") {
+        fieldPengencer.value = 5000;
+    } 
+    else if (jenisObat === "dopamin") {
+        fieldPengencer.value = 4000;
+    }
+}
 
     // 2. Rumus sesuai permintaan: (dosis * bb * mg) / pengencer
     function hitungDosis() {
