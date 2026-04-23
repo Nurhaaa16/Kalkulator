@@ -16,6 +16,14 @@
         .btn-hitung { background-color: #3498db; color: white; }
         .btn-reset { background-color: #e74c3c; color: white; }
         .footer { margin-top: 20px; text-align: center; font-size: 0.8em; color: #777; }
+        .btn-toggle {
+    background-color: #9b59b6;
+    color: white;
+    margin-top: 20px;
+}
+.btn-toggle:hover {
+    background-color: #8e44ad;
+}
     </style>
 </head>
 <body>
@@ -66,6 +74,18 @@
         *Selalu verifikasi ulang dosis sesuai protokol medis.
     </p>
 </footer>
+
+    <button class="btn-toggle" onclick="toggleFlipbook()">Lihat Panduan Obat Inotropik</button>
+
+<div id="flipbookContainer" style="display: none; margin-top: 20px;">
+    <div style="position: relative; padding-bottom: 75%; height: 0; overflow: hidden; max-width: 100%; border-radius: 10px; border: 2px solid #3498db;">
+        <iframe 
+            src="https://heyzine.com/flip-book/a9f6c8fcfc7273c3550c7fe35c17b36ebbf7ae57.html#page/7" 
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" 
+            allowfullscreen>
+        </iframe>
+    </div>
+</div>
 
 <script>
     // 1. Logika IF untuk mengisi angka otomatis saat obat dipilih
@@ -174,6 +194,19 @@ function isiOtomatis() {
     }
 
     document.getElementById("year").innerHTML = new Date().getFullYear();
+
+    function toggleFlipbook() {
+    const container = document.getElementById('flipbookContainer');
+    const btn = document.querySelector('.btn-toggle');
+    
+    if (container.style.display === "none") {
+        container.style.display = "block";
+        btn.innerHTML = "Tutup Panduan";
+    } else {
+        container.style.display = "none";
+        btn.innerHTML = "Lihat Panduan (Flipbook)";
+    }
+}
 </script>
 
 </body>
